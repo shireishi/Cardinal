@@ -4,6 +4,13 @@ import
 
 #! GLOBAL VARIABLES !#
 HEADER, PORT = 64, 8080
+SERVER = socket.gethostbyname(socket.gethostname())
+ADDR = (SERVER, PORT)
+FORMAT = 'utf-8'
+
+#! CONNECT TO SERVER !#
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(ADDR)
 
 """
 Server Architecture Notes:
@@ -17,9 +24,16 @@ Server Architecture Notes:
     is hashed by the same algorithm and then compared to make sure the correct data was recieved.
 """
 
-def server_start():
-    pass
+def handle_client(connection):
+    connection.send("test".encode(FORMAT))
 
-
+def start_server(): # starts the threading that will manage the new server connections
+    server.listen() # start the server listening on port 8080
+    Notifications.System.notify(f'Server is listening on port {PORT}')
+    while True:
+        conn, addr = server.accept()
+        thread = threading.Thread(target=handle_client, args=(conn, addr))
+        thread.start()
+        print(f'[ACTIVE CONNECTIONS] {threading.active_count() - 1}')
 
 server_start()
