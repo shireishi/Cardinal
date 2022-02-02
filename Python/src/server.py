@@ -46,10 +46,20 @@ Header Format:
     After the type of communication is read from the key, and then the hash is read after the recieving to confirm that the data recieved and the data sent is the same.
 
     The sha256 hashing algorithm will be used simply because of its modern-esque usage.
+
+Cardinal Naming System CNS:
+    This will be a localized database which will manage the pseudonyms of different keys for the server-side architecture. For example, the client does not need the exact
+    key for a transmission, but could instead can send "transmission" as a string and the CNS will return to the server the key for a transmission key.
 """
 
+keys = {
+    "request":      "123123123123123",
+    "transmission": "124124124124124"
+}
+
 def handle_client(connection):
-    connection.send("test".encode(FORMAT))
+    pass
+    
 
 def start_server(): # starts the threading that will manage the new server connections
     server.listen() # start the server listening on port 8080
