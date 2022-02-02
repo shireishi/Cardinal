@@ -1,6 +1,9 @@
 import socket
 import threading
-import asyncio
+import 
+
+#! GLOBAL VARIABLES !#
+HEADER, PORT = 64, 8080
 
 """
 Server Architecture Notes:
