@@ -33,15 +33,33 @@ ACTIVE_CONNECTIONS = {}
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+def decode_header(header_information):
+    protocol = int(header_information[0])
+    message_length = int(header_information[1:9])
+    message_hash = str(header_information[10:])
+    return (protocol, message_length, message_hash)
+
+def verify_message(message, message_hash):
+    if hash(message) == message_hash:return True
+    else:return False
+
 def handle_client(connection, address):
     global ACTIVE_CONNECTIONS
     connection.send(buff(CONNECTION_ESTABLISHED).encode(FORMAT))
     ACTIVE_CONNECTIONS[address] = connection
 
-    message_length = connection.recv(HEADER).decode(FORMAT)
-    message = connection.recv(message_length)
+    try:
+        protocol, message_length, message_hash = decode_header(connection.recv(HEADER).decode(FORMAT))
+        message = connection.recv(message_length)
+    except Exception as e:
+        connection.close()
+        System.error(e)
+        return
 
-    System.show_message(message, address)
+    if verify_message(message, message_hash) == True:
+        System.show_message(message, address)
+    else:
+        System.error("Did not recieve full and or correct message.")
 
 def start_server(): # starts the threading that will manage the new server connections
     server.listen() # start the server listening on port 8080
