@@ -1,4 +1,7 @@
+#! GENERAL IMPORTS !#
 import socket
+
+#! LOCAL IMPORTS !#
 from notifications import *
 from tools import *
 from security import *
