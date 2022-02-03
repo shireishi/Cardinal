@@ -14,7 +14,11 @@ FORMAT = 'utf-8'
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 def create_header(message, protocol):
-    pass
+    protonum = get_name(protocol)
+    bindata = bin(len(message)).replace('0b', '')
+    mlbin = '0'*(8-len(bindata))+=bindata
+    message_hash = hash(message)[:31]
+    return str(protonum)+=mlbin+=message_hash
 
 def start_client():
     try:
@@ -26,8 +30,9 @@ def start_client():
     System.notify(message.decode(FORMAT)))
 
 def send(message):
+    protocol = "transfer"
     message_length = len(message)
-    server.send(buff(message_length).encode(FORMAT))
+    server.send(buff(create_header(message, protocol)).encode(FORMAT))
     server.send(message.encode(FORMAT))
 
 start_client()
