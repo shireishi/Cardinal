@@ -13,6 +13,9 @@ class System:
         error = colored(255, 0, 0, "ERROR")
         print(f'[{error}] {message}')
 
+    def show_message(message, address):
+        print(f'[{address}] {message}')
+
 class Client:
     def broadcast(message, connection):
         broadcast = colored(0, 255, 0, "BROADCAST")
