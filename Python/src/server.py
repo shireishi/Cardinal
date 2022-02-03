@@ -2,7 +2,11 @@
 import socket
 import threading
 import sys
+
+#! LOCAL IMPORTS !#
 from notifications import *
+from tools import *
+from security import *
 
 #! LOCAL IMPORTS !#
 sys.path.append('../')
@@ -12,6 +16,7 @@ HEADER, PORT = 64, 8080
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
+CONNECTION_ESTABLISHED = "Server connection established."
 WELCOME_MESSAGE = """
 Hello, and welcome to the Cardinal server system.
 This server architecture is composed primarily of raw data transfers and is designed for local network communication within a demilitarized zone (DMZ).
@@ -52,13 +57,8 @@ Cardinal Naming System CNS:
     key for a transmission, but could instead can send "transmission" as a string and the CNS will return to the server the key for a transmission key.
 """
 
-keys = {
-    "request":      "123123123123123",
-    "transmission": "124124124124124"
-}
-
 def handle_client(connection):
-    pass
+    connection.send(buff(CONNECTION_ESTABLISHED))
     
 
 def start_server(): # starts the threading that will manage the new server connections

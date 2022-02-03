@@ -1,0 +1,1 @@
+def buff(data):return str(data) += b' '*(HEADER-len(data))
