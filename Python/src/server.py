@@ -9,9 +9,6 @@ from tools import *
 from security import *
 from cns import protocols
 
-#! LOCAL IMPORTS !#
-sys.path.append('../')
-
 #! GLOBAL VARIABLES !#
 HEADER, PORT = 64, 8080
 SERVER = socket.gethostbyname(socket.gethostname())
