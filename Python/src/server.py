@@ -57,8 +57,9 @@ Cardinal Naming System CNS:
     key for a transmission, but could instead can send "transmission" as a string and the CNS will return to the server the key for a transmission key.
 """
 
-def handle_client(connection):
+def handle_client(connection, address):
     connection.send(buff(CONNECTION_ESTABLISHED))
+
     
 
 def start_server(): # starts the threading that will manage the new server connections
