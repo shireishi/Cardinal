@@ -31,6 +31,7 @@ ACTIVE_CONNECTIONS = {}
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
+#! FUNCTIONS !#
 def decode_header(header_information):return ast.literal_eval(header_information)
 
 def verify_message(message, message_hash):
@@ -68,5 +69,6 @@ def start_server(): # starts the threading that will manage the new server conne
         thread.start()
         System.notify(f'Active connections : {threading.active_count() - 1}')
 
+#! EXECUTIVE CALLS !#
 print(WELCOME_MESSAGE)
 start_server()
