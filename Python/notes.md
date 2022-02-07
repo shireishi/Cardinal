@@ -1,5 +1,20 @@
+## Should the header be in json format?
+As I continue to think about how the header should be formatted, I run into the problem of further complexity. For example, say I wanted to add future protocols, then I would almost be required to increase the required space proportional to the ammount of information I wish to transfer in the headers. However, if I made this system generally more modular and with a nicer format than hardcoded positions for information, it could easily solve complexity problems.
+-- Current Method --
+```
+protocol key - length of message in binary - data hash confirming information
+```
+-- Planned Method --
+The initial header will simply be a header of 64 bit length that contains the length of the following message. The json header will then tell the server how long the actual message is.
+```json
+{
+    "protocol": "transfer",
+    "length": 72,
+    "hash": "asdkfhalsehrnjkb123iukh12kj3b1273yuioghsa7yid8fyuiausdgf"
+}
+```
 
-Server Architecture Notes:
+## Server Architecture Notes
     The server architecture will be primarily composed of a defined header that will contain the information
     about the length of the incoming information, which can range a very large data set.
 
@@ -9,7 +24,7 @@ Server Architecture Notes:
     There should also be a hash check system where a hash is sent along with the information, the information
     is hashed by the same algorithm and then compared to make sure the correct data was recieved.
 
-Header Format:
+## Header Format
     [key(32int)][len of message[1byte binary]][len 24 hash of data]
     Example:
     10000000000000000000000000000000 00001010 1232106153434310227543472
@@ -19,6 +34,6 @@ Header Format:
 
     The sha256 hashing algorithm will be used simply because of its modern-esque usage.
 
-Cardinal Naming System CNS:
+## Cardinal Naming System CNS
     This will be a localized database which will manage the pseudonyms of different keys for the server-side architecture. For example, the client does not need the exact
     key for a transmission, but could instead can send "transmission" as a string and the CNS will return to the server the key for a transmission key.
