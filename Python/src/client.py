@@ -13,15 +13,15 @@ PORT = 8080
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
-
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
+#! FUNCTIONS !#
 def create_header(message, protocol):
     protonum = get_name(protocol)
     bindata = bin(len(message)).replace('0b', '')
-    mlbin = '0'*(8-len(bindata))+=bindata
+    mlbin = '0'*(8-len(bindata))+bindata
     message_hash = hash(message)[:31]
-    return str(protonum)+=mlbin+=message_hash
+    return str(protonum)+mlbin+message_hash
 
 def start_client():
     try:
@@ -30,7 +30,7 @@ def start_client():
     try:
         message = server.recv(HEADER)
     except Exception as e:System.error(e)
-    System.notify(message.decode(FORMAT)))
+    System.notify(message.decode(FORMAT))
 
 def send(message):
     protocol = "transfer"
