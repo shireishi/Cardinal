@@ -25,11 +25,6 @@ multiple messaging changes.
 
 #! FUNCTIONS !#
 def create_header(message, protocol, message_length):
-    # protonum = get_name(protocol)
-    # bindata = bin(len(message)).replace('0b', '')
-    # mlbin = '0'*(8-len(bindata))+bindata
-    # message_hash = hash(message)[:31]
-    # return str(protonum)+mlbin+message_hash
     header = {
         "protocol": protocol,
         "length": message_length,
