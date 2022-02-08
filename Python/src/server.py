@@ -57,7 +57,7 @@ def handle_client(connection, address):
     else:
         System.error("Did not recieve full and or correct message.")
 
-    if protocol in cns.protocols:
+    if message_header["protocol"] in protocols:
         System.show_message(message, address)
 
 def start_server(): # starts the threading that will manage the new server connections
