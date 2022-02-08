@@ -2,6 +2,7 @@
 import socket
 import threading
 import sys
+import ast
 
 #! LOCAL IMPORTS !#
 from notifications import *
@@ -30,11 +31,8 @@ ACTIVE_CONNECTIONS = {}
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
-def decode_header(header_information):
-    protocol = int(header_information[0])
-    message_length = int(header_information[1:9])
-    message_hash = str(header_information[10:])
-    return (protocol, message_length, message_hash)
+#! FUNCTIONS !#
+def decode_header(header_information):return ast.literal_eval(header_information)
 
 def verify_message(message, message_hash):
     if hash(message) == message_hash:return True
@@ -46,17 +44,21 @@ def handle_client(connection, address):
     ACTIVE_CONNECTIONS[address] = connection
 
     try:
-        protocol, message_length, message_hash = decode_header(connection.recv(HEADER).decode(FORMAT))
-        message = connection.recv(message_length)
+        header_length = connection.recv(HEADER).decode(FORMAT)
+        message_header = decode_header(connection.recv(header_length).decode(FORMAT))
+        message = connection.recv(message_header["length"]).decode(FORMAT)
     except Exception as e:
         connection.close()
         System.error(e)
         return
 
-    if verify_message(message, message_hash) == True:
-        System.show_message(message, address)
+    if verify_message(message, message_header["hash"]) == True:
+        pass
     else:
         System.error("Did not recieve full and or correct message.")
+
+    if protocol in cns.protocols:
+        System.show_message(message, address)
 
 def start_server(): # starts the threading that will manage the new server connections
     server.listen() # start the server listening on port 8080
@@ -67,5 +69,6 @@ def start_server(): # starts the threading that will manage the new server conne
         thread.start()
         System.notify(f'Active connections : {threading.active_count() - 1}')
 
+#! EXECUTIVE CALLS !#
 print(WELCOME_MESSAGE)
 start_server()

@@ -1,1 +1,1 @@
-def buff(data):return str(data) += b' '*(HEADER-len(data))
+def buff(data):return str(data) + b' '*(HEADER-len(data))
