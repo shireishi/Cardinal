@@ -1,6 +1,6 @@
 fn hash(mut data: Vec<String>) -> String {
     println!("{:?}", data);
-    String::from("test string")
+    String::from("hello world")
 }
 
 fn main() {
