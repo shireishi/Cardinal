@@ -28,6 +28,7 @@ def create_header(message, protocol, message_length):
     header = {
         "protocol": protocol,
         "length": message_length,
+        "message": message,
         "hash": hash(message)
     }
     return str(header)
