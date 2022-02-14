@@ -55,7 +55,7 @@ def process_commands(message):
     if command == "shutdown":
         try:
             for user in ACTIVE_CONNECTIONS.keys():
-                ACTIVE_CONNECTIONS[user].disconnect()
+                ACTIVE_CONNECTIONS[user].close()
                 System.notify(f'Disconnected {user}')
         except Exception as e:
             System.error(e)
