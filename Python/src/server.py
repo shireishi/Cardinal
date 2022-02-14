@@ -44,6 +44,11 @@ def process_commands(message):
     return True if command is executed completely and correctly
     return False if command failed to execute or if it failed to complete
     return null if there is no command to execute
+
+    Existing commands:
+    shutdown    - disconnects all connected clients and closes the server program
+    connections - displays all of the active connections to the server
+    broadcast   - sends the following message to all of the connected clients
     """
     success = True
     failed = False
@@ -52,8 +57,10 @@ def process_commands(message):
     if message.starts_with() == command_prefix:pass
     else:return nothing
 
-    command = message[1:]
-    
+    split_message = message.split()
+    command = split_message[0]
+    comargs = ' '.join(split_message[1:])
+
     if command == "shutdown":
         try:
             for user in ACTIVE_CONNECTIONS.keys():
@@ -74,6 +81,10 @@ def process_commands(message):
             System.error(e)
             return failed
         return success
+
+    if command == "broadcast":
+        for user in ACTIVE_CONNECTIONS:
+            ACTIVE_CONNECTIONS[user].send(comargs.encode(FORMAT))
 
 def handle_client(connection, address):
     global ACTIVE_CONNECTIONS
