@@ -1,4 +1,4 @@
-def colored(r, g, b, text): return "\033[38;2;{};{};{}m{}\033[m".format(r, g, b, text)
+from tools import colored
 
 class System:
     def broadcast(message):
