@@ -37,3 +37,19 @@ The initial header will simply be a header of 64 bit length that contains the le
 ## Cardinal Naming System CNS
     This will be a localized database which will manage the pseudonyms of different keys for the server-side architecture. For example, the client does not need the exact
     key for a transmission, but could instead can send "transmission" as a string and the CNS will return to the server the key for a transmission key.
+
+## Random Notes
+Today I learned that you can use some variable one-liner assignments that use wildcards.
+For example, if you use the one-liner; `a, b, *c = [1, 2, 3, 4, 5]` then you will get the output of
+`print(a, b, c) # 1 2 [3, 4, 5]` and that can be really useful, perhaps there is a way to integrate this into semi-list combinations. In theory, something like:
+```python
+l = [1, 2, 3, 4, 5, 6]
+*a, *b = l
+print(a, b)
+# [1, 2, 3] [4, 5, 6]
+```
+I think that having this as an actual modular half list assignment system could be really nice, but I don't know if the python compiler would like that since 
+
+## Bitwise Operations
+### & Operator
+the & bitwise operator checks if the bit in a certain position exists as a value or if two ints or uints are equal by checking all of their bits and their correspondence in certain locations.

@@ -51,12 +51,23 @@ def process_commands(message):
 
     if message.starts_with() == command_prefix:continue
     else:return nothing
+
     command = message[1:]
+    
     if command == "shutdown":
         try:
             for user in ACTIVE_CONNECTIONS.keys():
                 ACTIVE_CONNECTIONS[user].close()
                 System.notify(f'Disconnected {user}')
+        except Exception as e:
+            System.error(e)
+            return failed
+        return success
+    
+    if command == "connections":
+        try:
+            for user in ACTIVE_CONNECTIONS:
+                System.notify(user)
         except Exception as e:
             System.error(e)
             return failed
@@ -68,6 +79,7 @@ def handle_client(connection, address):
     ACTIVE_CONNECTIONS[address] = connection
 
     try:
+        # recieve all required data
         header_length = connection.recv(HEADER).decode(FORMAT)
         message_header = decode_header(connection.recv(header_length).decode(FORMAT))
         message = connection.recv(message_header["length"]).decode(FORMAT)
@@ -76,14 +88,17 @@ def handle_client(connection, address):
         System.error(e)
         return
 
+    # verify the message using the provided and generated hash
     if verify_message(message, message_header["hash"]) == True:
         pass
     else:
         System.error("Did not recieve full and or correct message.")
 
+    # if the protocol sent in the message exists within known protocols then fulfill request
     if message_header["protocol"] in protocols:
         System.show_message(message, address)
 
+    # parse through message for commands
     execution_status = process_commands(message)
 
 def start_server(): # starts the threading that will manage the new server connections
