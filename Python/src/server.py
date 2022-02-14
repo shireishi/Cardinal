@@ -26,6 +26,7 @@ Thank you
 Keys
 """
 ACTIVE_CONNECTIONS = {}
+command_prefix = "!"
 
 #! CONNECT TO SERVER !#
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -37,6 +38,29 @@ def decode_header(header_information):return ast.literal_eval(header_information
 def verify_message(message, message_hash):
     if hash(message) == message_hash:return True
     else:return False
+
+def process_commands(message):
+    """
+    return True if command is executed completely and correctly
+    return False if command failed to execute or if it failed to complete
+    return null if there is no command to execute
+    """
+    success = True
+    failed = False
+    nothing = None
+
+    if message.starts_with() == command_prefix:continue
+    else:return nothing
+    command = message[1:]
+    if command == "shutdown":
+        try:
+            for user in ACTIVE_CONNECTIONS.keys():
+                ACTIVE_CONNECTIONS[user].disconnect()
+                System.notify(f'Disconnected {user}')
+        except Exception as e:
+            System.error(e)
+            return failed
+        return success
 
 def handle_client(connection, address):
     global ACTIVE_CONNECTIONS
@@ -59,6 +83,8 @@ def handle_client(connection, address):
 
     if message_header["protocol"] in protocols:
         System.show_message(message, address)
+
+    execution_status = process_commands(message)
 
 def start_server(): # starts the threading that will manage the new server connections
     server.listen() # start the server listening on port 8080
