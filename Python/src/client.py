@@ -43,10 +43,14 @@ def start_client():
 
 def send(message):
     protocol = "transfer"
+    
+    
     message_length = len(message)
-    server.send(buff(message_length))
-    server.send(buff(create_header(message, protocol, message_length)).encode(FORMAT))
-    server.send(message.encode(FORMAT))
+    header = create_header(message, protocol, message_length).encode(FORMAT)
+    header_length = len(header)
+
+    server.send(buff(header_length)) # send the size of the header as a json string
+    server.send(header) # send the actual header as a json string
 
 #! EXECUTIVE CALLS !#
 start_client()

@@ -49,7 +49,7 @@ def process_commands(message):
     failed = False
     nothing = None
 
-    if message.starts_with() == command_prefix:continue
+    if message.starts_with() == command_prefix:pass
     else:return nothing
 
     command = message[1:]
@@ -59,6 +59,8 @@ def process_commands(message):
             for user in ACTIVE_CONNECTIONS.keys():
                 ACTIVE_CONNECTIONS[user].close()
                 System.notify(f'Disconnected {user}')
+                System.notify("Shutting down")
+                quit()
         except Exception as e:
             System.error(e)
             return failed
@@ -81,21 +83,23 @@ def handle_client(connection, address):
     try:
         # recieve all required data
         header_length = connection.recv(HEADER).decode(FORMAT)
-        message_header = decode_header(connection.recv(header_length).decode(FORMAT))
-        message = connection.recv(message_header["length"]).decode(FORMAT)
+        header = connection.recv(header_length).decode(FORMAT)
+        header = ast.literal_eval(header)
     except Exception as e:
         connection.close()
         System.error(e)
         return
 
+    message = header["message"]
+
     # verify the message using the provided and generated hash
-    if verify_message(message, message_header["hash"]) == True:
+    if verify_message(message, header["hash"]) == True:
         pass
     else:
         System.error("Did not recieve full and or correct message.")
 
     # if the protocol sent in the message exists within known protocols then fulfill request
-    if message_header["protocol"] in protocols:
+    if header["protocol"] in protocols:
         System.show_message(message, address)
 
     # parse through message for commands
