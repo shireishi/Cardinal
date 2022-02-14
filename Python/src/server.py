@@ -43,7 +43,7 @@ def process_commands(message):
     """
     return True if command is executed completely and correctly
     return False if command failed to execute or if it failed to complete
-    return null if there is no command to execute
+    return None if there is no command to execute
 
     Existing commands:
     shutdown    - disconnects all connected clients and closes the server program
