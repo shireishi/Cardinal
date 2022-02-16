@@ -116,7 +116,7 @@ class Server:
             System.show_message(message, address)
 
         # parse through message for commands
-        execution_status = process_commands(message)
+        execution_status = Commands.process_commands(message)
 
     def start_server(): # starts the threading that will manage the new server connections
         server.listen() # start the server listening on port 8080
