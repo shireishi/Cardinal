@@ -30,7 +30,7 @@ ACTIVE_CONNECTIONS = {}
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
 
-#! FUNCTIONS !#
+#! Command Class !#
 class Commands:
     def process_commands(message):
         """
@@ -80,6 +80,7 @@ class Commands:
                 ACTIVE_CONNECTIONS[user].send(len(comargs))
                 ACTIVE_CONNECTIONS[user].send(comargs.encode(FORMAT))
 
+#! Server Class !#
 class Server:
     def decode_header(header_information):return ast.literal_eval(header_information)
 
