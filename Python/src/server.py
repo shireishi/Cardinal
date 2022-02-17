@@ -47,7 +47,7 @@ class Commands:
         failed = False
         nothing = None
 
-        if message.starts_with() == command_prefix:pass
+        if message.startswith(command_prefix):pass
         else:return nothing
 
         split_message = message.split()
