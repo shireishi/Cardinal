@@ -30,7 +30,7 @@ def process_response(response):
     try:
         if int(response) == 1:pass
         if int(response) == 0:System.error("Failed to execute command on the server.")
-    except:if isinstance(response, str):System.broadcast(response)
+    except:System.broadcast(response.decode(FORMAT)) if isinstance(response, str) else System.error("Failed to display response from server")
 
 def create_header(message, protocol, message_length):
     header = {
@@ -46,7 +46,7 @@ def start_client():
     try:message = server.recv(HEADER)
     except Exception as e:System.error(e)
 
-    System.notify(message.decode(FORMAT))
+    System.notify(message.decode(FORMAT)) if message else System.error("Failed to connect to server")
 
 def send(message):
     protocol = "transfer"
