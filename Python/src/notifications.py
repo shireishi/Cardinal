@@ -12,6 +12,7 @@ class System:
     def error(message):
         error = colored(255, 0, 0, "ERROR")
         print(f'[{error}] {message}')
+        raise Exception(message)
 
     def show_message(message, address):
         print(f'[{address}] {message}')
@@ -28,4 +29,5 @@ class Client:
     def error(message, connection):
         error = colored(255, 0, 0, "ERROR")
         connection.send(f'[{error}] {message}')
+        raise Exception(message)
         
