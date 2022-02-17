@@ -1,6 +1,14 @@
+use compare::{Compare, natural};
+use std::cmp::Ordering::{Less, Equal, Greater};
+
 fn hash(mut data: Vec<String>) -> String {
     println!("{:?}", data);
-    String::from("test string")
+    let comparison_string: String = String::from("Never gonna give you up");
+    let cmp = natural();
+    if cmp.compares_eq(data, comparison_string) {
+        println!("Hello world");
+    }
+    comparison_string
 }
 
 fn main() {
