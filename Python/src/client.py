@@ -38,11 +38,13 @@ def create_header(message, protocol, message_length):
         "length": message_length,
         "hash": hash(message)
     }
-    return str(header)
+    try:return str(header)
+    except:return "{}"
 
 def start_client():
     try:server.bind(ADDR)
     except Exception as e:System.error(e)
+
     try:message = server.recv(HEADER)
     except Exception as e:System.error(e)
 
@@ -66,11 +68,13 @@ def send(message):
 
     is_command = test_command(message)
 
+    ## DEFINING DATA INFORMATION ##
     message_length = len(message)
     header = create_header(message, protocol, message_length).encode(FORMAT)
     header_length = len(header)
     message = message.encode(FORMAT)
 
+    ## SEND ALL OF THE NECESSARY DATA ##
     server.send(buff(header_length)) # send the size of the header as a json string
     server.send(header) # send the actual header as a json string
     server.send(message_length)
