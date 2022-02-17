@@ -1,0 +1,4 @@
+# Cardinal Server Architecture (C++)
+This is the C++ variation of the Cardinal Server Architecture. Keep in mind that all of these architectures are designed to be entirely identical in function and execution. The only difference between each is their software language. Hopefully, the differences caused by such are unimportant.
+
+I understand that most may prefer to use the C/C++ variations of this server architecture due to the increased speed of the execution; however, I also understand that others may use the Python and or Rust architectures for easy portability within their projects using direct functions instead of rewriting existing functions.
