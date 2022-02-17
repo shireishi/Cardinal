@@ -28,7 +28,7 @@ def test_command(message):
 
 def process_response(response):
     try:
-        if int(response) == 1:pass
+        if int(response) == 1:System.debug(response)
         if int(response) == 0:System.error("Failed to execute command on the server.")
     except:System.broadcast(response) if isinstance(response, str) else System.error("Failed to display response from server")
 
@@ -48,6 +48,8 @@ def start_client():
     except Exception as e:System.error(e)
 
 def send(message):
+    if message:pass
+    else:return
     protocol = "transfer"
     
     # Send instructions :
@@ -82,8 +84,8 @@ def send(message):
         System.error(e)
 
     if is_command: # if the message sent is a command then wait for a response from the server
-        response = server.recv(HEADER).decode(FORMAT)
-        if response:process_response(response)
+        status = server.recv(HEADER).decode(FORMAT)
+        if status:process_response(status)
 
 #! EXECUTIVE CALLS !#
 start_client()

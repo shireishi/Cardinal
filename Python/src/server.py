@@ -34,7 +34,7 @@ server.bind(ADDR)
 class Commands:
     def command_test(message):return True if message.startswith(command_prefix) else False
 
-    def process_commands(message):
+    def process_commands(message, connection):
         """
         return True if command is executed completely and correctly
         return False if command failed to execute or if it failed to complete
@@ -49,10 +49,11 @@ class Commands:
         failed = False
         nothing = None
 
-        if message.startswith(command_prefix):pass
+        if message[0] == (command_prefix):
+            if debug==True:System.debug("Message is command")
         else:return nothing
 
-        split_message = message.split()
+        split_message = message[1:].split()
         command = split_message[0]
         comargs = ' '.join(split_message[1:])
 
@@ -65,7 +66,6 @@ class Commands:
                     quit()
             except Exception as e:
                 System.error(e)
-                return failed
             return success
         
         if command == "connections":
@@ -74,13 +74,19 @@ class Commands:
                     System.notify(user)
             except Exception as e:
                 System.error(e)
-                return failed
             return success
 
         if command == "broadcast":
-            for user in ACTIVE_CONNECTIONS:
-                ACTIVE_CONNECTIONS[user].send(len(comargs))
+            for user in ACTIVE_CONNECTIONS.keys():
+                ACTIVE_CONNECTIONS[user].send(buff(str(len(comargs))))
                 ACTIVE_CONNECTIONS[user].send(comargs.encode(FORMAT))
+
+        if command == "disconnect":
+            connection.close()
+            System.notify("User disconnected.")
+            return success
+
+        return failed
 
 #! Server Class !#
 class Server:
@@ -104,7 +110,7 @@ class Server:
 
                 message = connection.recv(int(header["length"])).decode(FORMAT)
 
-                if debug==True:print(header_length, header, message)
+                if debug==True:System.debug(header_length, header, message)
             except Exception as e:
                 connection.close()
                 System.error(e)
@@ -117,11 +123,11 @@ class Server:
             if header["protocol"] in protocols:System.show_message(message, address)
 
             # parse through message for commands
-            execution_status = Commands.process_commands(message)
+            execution_status = Commands.process_commands(message, connection)
             is_command = Commands.command_test(str(message))
             if debug == True:
-                print(execution_status)
-                print(is_command)
+                System.debug(execution_status)
+                System.debug(is_command)
             # send a true or false value depending on the execution status of the command
             if is_command == True:connection.send(buff(1 if execution_status else 0))
 
