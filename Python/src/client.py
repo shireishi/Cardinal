@@ -6,7 +6,7 @@ from notifications import *
 from tools import *
 from security import *
 from cns import *
-import globvals
+from globvals import *
 
 #! GLOBAL VARIABLES !#
 SERVER = socket.gethostbyname(socket.gethostname())
