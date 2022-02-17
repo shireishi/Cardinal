@@ -9,12 +9,11 @@ from notifications import *
 from tools import *
 from security import *
 from cns import protocols
+import globvals
 
 #! GLOBAL VARIABLES !#
-HEADER, PORT = 64, 8080
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDR = (SERVER, PORT)
-FORMAT = 'utf-8'
 CONNECTION_ESTABLISHED = "Server connection established."
 WELCOME_MESSAGE = """
 Hello, and welcome to the Cardinal server system.
@@ -26,7 +25,6 @@ Thank you
 Keys
 """
 ACTIVE_CONNECTIONS = {}
-command_prefix = "!"
 
 #! CONNECT TO SERVER !#
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -79,6 +77,7 @@ class Commands:
 
         if command == "broadcast":
             for user in ACTIVE_CONNECTIONS:
+                ACTIVE_CONNECTIONS[user].send(len(comargs))
                 ACTIVE_CONNECTIONS[user].send(comargs.encode(FORMAT))
 
 class Server:
@@ -117,6 +116,8 @@ class Server:
 
         # parse through message for commands
         execution_status = Commands.process_commands(message)
+        # send a true or false value depending on the execution status of the command
+        connection.send(buff(1 if execution_status else 0))
 
     def start_server(): # starts the threading that will manage the new server connections
         server.listen() # start the server listening on port 8080
