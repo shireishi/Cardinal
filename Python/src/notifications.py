@@ -16,7 +16,7 @@ class System:
 
     def debug(*message):
         debug = colored(255, 255, 0, "DEBUG")
-        print('[{}] {}'.format(debug, ' '.join(x for x in message)))
+        print('[{}] {}'.format(debug, ' '.join(str(x) for x in message)))
 
     def show_message(message, address):
         user = colored(0, 128, 0, f'{address[0]}:{address[1]}')
