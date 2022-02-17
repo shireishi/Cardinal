@@ -25,7 +25,7 @@ There should also be a hash check system where a hash is sent along with the inf
 is hashed by the same algorithm and then compared to make sure the correct data was recieved.
 
 ### TODO
-- [ ] Set up the client-side recieving after a command is sent to the server, if the command does not have a set reply, then just send an empty buffer that is disregarded from the client.
+- [x] Set up the client-side recieving after a command is sent to the server, if the command does not have a set reply, then just send an empty buffer that is disregarded from the client.
 
 ## Header Format
 [key(32int)][len of message[1byte binary]][len 24 hash of data]
