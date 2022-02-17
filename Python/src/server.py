@@ -106,14 +106,11 @@ class Server:
         message = header["message"]
 
         # verify the message using the provided and generated hash
-        if verify_message(message, header["hash"]) == True:
-            pass
-        else:
-            System.error("Did not recieve full and or correct message.")
+        if verify_message(message, header["hash"]) == True:pass
+        else:System.error("Did not recieve full and or correct message.")
 
         # if the protocol sent in the message exists within known protocols then fulfill request
-        if header["protocol"] in protocols:
-            System.show_message(message, address)
+        if header["protocol"] in protocols:System.show_message(message, address)
 
         # parse through message for commands
         execution_status = Commands.process_commands(message)

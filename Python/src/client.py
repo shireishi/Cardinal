@@ -30,8 +30,7 @@ def process_response(response):
     try:
         if int(response) == 1:pass
         if int(response) == 0:System.error("Failed to execute command on the server.")
-    except:
-        if isinstance(response, str):System.broadcast(response)
+    except:if isinstance(response, str):System.broadcast(response)
 
 def create_header(message, protocol, message_length):
     header = {
@@ -42,12 +41,11 @@ def create_header(message, protocol, message_length):
     return str(header)
 
 def start_client():
-    try:
-        server.bind(ADDR)
+    try:server.bind(ADDR)
     except Exception as e:System.error(e)
-    try:
-        message = server.recv(HEADER)
+    try:message = server.recv(HEADER)
     except Exception as e:System.error(e)
+
     System.notify(message.decode(FORMAT))
 
 def send(message):
@@ -84,5 +82,4 @@ def send(message):
 
 #! EXECUTIVE CALLS !#
 start_client()
-while True:
-    send(input(":"))
+while True:send(input(":"))
