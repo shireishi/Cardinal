@@ -125,6 +125,7 @@ class Server:
             thread = threading.Thread(target=handle_client, args=(conn, addr))
             thread.start()
             System.notify(f'Active connections : {threading.active_count() - 1}')
+            System.notify(f'{addr[0]} connected to the server')
 
 #! EXECUTIVE CALLS !#
 print(WELCOME_MESSAGE)
