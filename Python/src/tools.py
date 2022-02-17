@@ -7,10 +7,14 @@ def compress(data):
     compressed = ""
     count = 1
 
-    for letter, index in enumerate(data):
-        if data[index+1] == letter:count+=1
-        elif data[index+1] != letter:
-            compressed += letter+str(count)
-            count = 1
-    
+    for index, letter in enumerate(data):
+        try:
+            if data[index+1] == letter:count+=1
+            elif data[index+1] != letter:
+                compressed += letter+str(count)
+                count = 1
+        except Exception as e:
+            System.error(e)
+            continue
+
     return compressed
