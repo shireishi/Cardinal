@@ -1,4 +1,7 @@
-def buff(data):return str(data) + b' '*(HEADER-len(data))
+from globvals import *
+from notifications import *
+
+def buff(data):return str(data).encode(FORMAT) + b' '*(HEADER-len(str(data)))
 
 def colored(r, g, b, text): return "\033[38;2;{};{};{}m{}\033[m".format(r, g, b, text)
 
@@ -14,7 +17,7 @@ def compress(data):
                 compressed += letter+str(count)
                 count = 1
         except Exception as e:
-            System.error(e)
+            System.notify(e)
             continue
 
     return compressed

@@ -32,6 +32,8 @@ server.bind(ADDR)
 
 #! Command Class !#
 class Commands:
+    def command_test(message):return True if message.startswith(command_prefix) else False
+
     def process_commands(message):
         """
         return True if command is executed completely and correctly
@@ -68,7 +70,7 @@ class Commands:
         
         if command == "connections":
             try:
-                for user in ACTIVE_CONNECTIONS:
+                for user in ACTIVE_CONNECTIONS.keys():
                     System.notify(user)
             except Exception as e:
                 System.error(e)
@@ -90,39 +92,45 @@ class Server:
 
     def handle_client(connection, address):
         global ACTIVE_CONNECTIONS
-        connection.send(buff(CONNECTION_ESTABLISHED).encode(FORMAT))
         ACTIVE_CONNECTIONS[address] = connection
 
-        try:
-            # recieve all required data
-            header_length = connection.recv(HEADER).decode(FORMAT)
-            header = connection.recv(header_length).decode(FORMAT)
-            header = ast.literal_eval(header)
-        except Exception as e:
-            connection.close()
-            System.error(e)
-            return
+        connected = True
+        while connected:
+            try:# recieve all required data
+                header_length = int(connection.recv(HEADER).decode(FORMAT))
+                header = connection.recv(int(header_length)).decode(FORMAT)
 
-        message = header["message"]
+                header = ast.literal_eval(header)
 
-        # verify the message using the provided and generated hash
-        if verify_message(message, header["hash"]) == True:pass
-        else:System.error("Did not recieve full and or correct message.")
+                message = connection.recv(int(header["length"])).decode(FORMAT)
 
-        # if the protocol sent in the message exists within known protocols then fulfill request
-        if header["protocol"] in protocols:System.show_message(message, address)
+                if debug==True:print(header_length, header, message)
+            except Exception as e:
+                connection.close()
+                System.error(e)
 
-        # parse through message for commands
-        execution_status = Commands.process_commands(message)
-        # send a true or false value depending on the execution status of the command
-        connection.send(buff(1 if execution_status else 0))
+            # verify the message using the provided and generated hash
+            if Server.verify_message(message, header["hash"]) == True:pass
+            else:System.error("Did not recieve full and or correct message.")
+
+            # if the protocol sent in the message exists within known protocols then fulfill request
+            if header["protocol"] in protocols:System.show_message(message, address)
+
+            # parse through message for commands
+            execution_status = Commands.process_commands(message)
+            is_command = Commands.command_test(str(message))
+            if debug == True:
+                print(execution_status)
+                print(is_command)
+            # send a true or false value depending on the execution status of the command
+            if is_command == True:connection.send(buff(1 if execution_status else 0))
 
     def start_server(): # starts the threading that will manage the new server connections
         server.listen() # start the server listening on port 8080
         System.notify(f'Server is listening on port {PORT}')
         while True:
             conn, addr = server.accept()
-            thread = threading.Thread(target=handle_client, args=(conn, addr))
+            thread = threading.Thread(target=Server.handle_client, args=(conn, addr))
             thread.start()
             System.notify(f'Active connections : {threading.active_count() - 1}')
             System.notify(f'{addr[0]} connected to the server')

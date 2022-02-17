@@ -23,14 +23,14 @@ multiple messaging changes.
 
 #! FUNCTIONS !#
 def test_command(message):
-    if message.starts_with(command_prefix):return True
+    if message.startswith(command_prefix):return True
     else:return False
 
 def process_response(response):
     try:
         if int(response) == 1:pass
         if int(response) == 0:System.error("Failed to execute command on the server.")
-    except:System.broadcast(response.decode(FORMAT)) if isinstance(response, str) else System.error("Failed to display response from server")
+    except:System.broadcast(response) if isinstance(response, str) else System.error("Failed to display response from server")
 
 def create_header(message, protocol, message_length):
     header = {
@@ -42,13 +42,10 @@ def create_header(message, protocol, message_length):
     except:return "{}"
 
 def start_client():
-    try:server.bind(ADDR)
+    try:
+        server.connect(ADDR)
+        System.broadcast("Server connection established.")
     except Exception as e:System.error(e)
-
-    try:message = server.recv(HEADER)
-    except Exception as e:System.error(e)
-
-    System.notify(message.decode(FORMAT)) if message else System.error("Failed to connect to server")
 
 def send(message):
     protocol = "transfer"
@@ -74,11 +71,15 @@ def send(message):
     header_length = len(header)
     message = message.encode(FORMAT)
 
+    if debug == True:print(buff(header_length), header, message)
+
     ## SEND ALL OF THE NECESSARY DATA ##
-    server.send(buff(header_length)) # send the size of the header as a json string
-    server.send(header) # send the actual header as a json string
-    server.send(message_length)
-    server.send(message)
+    try:
+        server.send(buff(header_length)) # send the size of the header as a json string
+        server.send(header) # send the actual header as a json string
+        server.send(message)
+    except Exception as e:
+        System.error(e)
 
     if is_command: # if the message sent is a command then wait for a response from the server
         response = server.recv(HEADER).decode(FORMAT)
@@ -86,4 +87,6 @@ def send(message):
 
 #! EXECUTIVE CALLS !#
 start_client()
-while True:send(input(":"))
+try:
+    while True:send(input(":"))
+except KeyboardInterrupt:System.broadcast("Closing client program.")

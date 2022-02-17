@@ -15,7 +15,8 @@ class System:
         raise Exception(message)
 
     def show_message(message, address):
-        print(f'[{address}] {message}')
+        user = colored(0, 128, 0, f'{address[0]}:{address[1]}')
+        print(f'[{user}]: {message}')
 
 class Client:
     def broadcast(message, connection):
